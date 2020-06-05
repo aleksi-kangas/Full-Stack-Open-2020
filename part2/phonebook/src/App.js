@@ -1,11 +1,13 @@
-import React, { useState, useEffect } from 'react'
-import axios from 'axios'
+import React, { useState, useEffect } from "react"
+
+import peopleService from "./services/people"
+
 import Filter from "./components/Filter"
 import Form from "./components/Form"
 import People from "./components/People"
 
 const App = () => {
-    const [ persons, setPersons ] = useState([])
+    const [ people, setPeople ] = useState([])
     const [ newName, setNewName ] = useState('')
     const [ newNumber, setNewNumber ] = useState('')
     const [ newFilter, setNewFilter ] = useState('')
@@ -24,25 +26,57 @@ const App = () => {
 
     // Fetch data at the start of the application
     useEffect(() => {
-        axios
-            .get("http://localhost:3001/persons")
-            .then(response => {
-                setPersons(response.data)
+        peopleService
+            .getAll()
+            .then(returnedPeople => {
+                setPeople(returnedPeople)
             })
     }, [])
 
     const addPerson = (event) => {
         event.preventDefault()
-        if (persons.every((person) => person.name !== newName)) {
-            const newPerson = {
-                name: newName,
-                number: newNumber
-            }
-            setPersons(persons.concat(newPerson))
-            setNewName('')
-            setNewNumber('')
-        } else {
-            alert(`${newName} is already added to the phonebook`)
+
+        const newPerson = {
+            name: newName,
+            number: newNumber
+        }
+        // Person does not exist in the phonebook
+        if (people.every((person) => person.name.toLowerCase() !== newName.toLowerCase())) {
+            peopleService
+                .create(newPerson)
+                .then(returnedPerson => {
+                    setPeople(people.concat(returnedPerson))
+                    setNewName('')
+                    setNewNumber('')
+                })
+        }
+        // Person exists already -> update
+        else if (window.confirm(`${newPerson.name} is already added to the phonebook,
+             replace the old number with a new one?`)) {
+            updatePerson(newPerson)
+        }
+    }
+
+    const updatePerson = (person) => {
+        // Find the id of the existing entry and copy it to the new entry
+        const id = people.find(p => p.name.toLowerCase() === person.name.toLowerCase()).id
+        person = {...person, id: id}
+
+        peopleService
+            .update(id, person)
+            .then(returnedPerson => {
+                setPeople(people.map(p => p.id !== id ? p : returnedPerson))
+                setNewName('')
+                setNewNumber('')
+            })
+    }
+
+    const deletePerson = (person) => {
+        if (window.confirm(`Delete ${person.name}?`)) {
+            peopleService
+                .deleteEntry(person.id)
+                .then()  // ignored
+            setPeople(people.filter(p => p.id !== person.id))
         }
     }
 
@@ -57,7 +91,7 @@ const App = () => {
                 name={newName} number={newNumber}
             />
             <h3>Numbers</h3>
-            <People people={persons} filterValue={newFilter} />
+            <People people={people} filterValue={newFilter} deletePerson={deletePerson}/>
         </>
     )
 }
