@@ -62,6 +62,13 @@ const App = () => {
                         setMessage(null)
                     }, 2000)
                 })
+                .catch(e => {
+                    // Error message
+                    setError(e.response.data.error)
+                    setTimeout(() => {
+                        setError(null)
+                    }, 5000)
+                })
         }
         // Person exists already -> update
         else if (window.confirm(`${newPerson.name} is already added to the phonebook,
@@ -89,11 +96,18 @@ const App = () => {
                 }, 2000)
             })
             .catch(e => {
-                setPeople(people.filter(p => p.id !== id))
-                setError(`Information of ${person.name} has already been removed from the server`)
-                setTimeout(() => {
-                    setError(null)
-                }, 5000);
+                if (e.response.status === 400) {
+                    setError(e.response.data.error)
+                    setTimeout(() => {
+                        setError(null)
+                    }, 5000)
+                } else {
+                    setPeople(people.filter(p => p.id !== id))
+                    setError(`Information of ${person.name} has already been removed from the server`)
+                    setTimeout(() => {
+                        setError(null)
+                    }, 5000)
+                }
             })
     }
 
