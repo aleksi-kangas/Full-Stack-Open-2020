@@ -2,11 +2,11 @@ import React from 'react'
 import { render, fireEvent } from '@testing-library/react'
 import Blog from './Blog'
 
-const likeBlog = jest.fn()
-const deleteBlog = jest.fn()
 
 describe('<Blog />', () => {
     let component
+    const likeBlog = jest.fn()
+    const deleteBlog = jest.fn()
     const blog = {
         title: 'Blog Title',
         author: 'Blog Author',
@@ -23,9 +23,7 @@ describe('<Blog />', () => {
         const user = {}
 
         component = render(
-            <Blog blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user}>
-                <div className="testDiv" />
-            </Blog>
+            <Blog blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
         )
     })
 
@@ -71,7 +69,7 @@ describe('<Blog />', () => {
             fireEvent.click(likeButton)
             fireEvent.click(likeButton)
 
-            expect(likeBlog.mock.calls).toHaveLength(2)
+            expect(likeBlog.mock.calls.length).toBe(2)
         })
     })
 })
