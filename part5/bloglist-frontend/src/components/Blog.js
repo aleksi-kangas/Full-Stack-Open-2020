@@ -32,18 +32,18 @@ const Blog = ({ blog, likeBlog, deleteBlog, user }) => {
             {blog.user.name}
           </div>
           {user.username === blog.user.username ?
-              <div>
-                <button onClick={() => deleteBlog(blog)}>Remove</button>
-              </div>
-              :
-              null
+            <div>
+              <button onClick={() => deleteBlog(blog)}>Remove</button>
+            </div>
+            :
+            null
           }
         </div>
-          :
-          null
+        :
+        null
       }
     </div>
-)}
+  )}
 
 Blog.propTypes = {
   blog: PropTypes.object.isRequired,

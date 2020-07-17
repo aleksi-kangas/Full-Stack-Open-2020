@@ -21,9 +21,9 @@ const App = () => {
 
   useEffect(() => {
     blogService
-        .getAll()
-        .then(blogs => sortBlogs(blogs))
-        .then(sortedBlogs => setBlogs(sortedBlogs))
+      .getAll()
+      .then(blogs => sortBlogs(blogs))
+      .then(sortedBlogs => setBlogs(sortedBlogs))
   }, [])
 
   useEffect(() => {
@@ -38,8 +38,8 @@ const App = () => {
 
   const sortBlogs = (blogs) => {
     return (
-        blogs.sort((a, b) => a.likes < b.likes)
-    );
+      blogs.sort((a, b) => a.likes < b.likes)
+    )
   }
 
   const handleLogin = async (event) => {
@@ -69,7 +69,7 @@ const App = () => {
     }
   }
 
-  const handleLogout = (event) => {
+  const handleLogout = () => {
     window.localStorage.removeItem('loggedUser')
     setUser(null)
   }
@@ -116,9 +116,9 @@ const App = () => {
 
   // User to render BlogFrom inside a Togglable component
   const blogForm = () => (
-      <Togglable buttonLabel='New Blog' ref={blogFormRef}>
-        <BlogForm createBlog={addBlog} />
-      </Togglable>
+    <Togglable buttonLabel='New Blog' ref={blogFormRef}>
+      <BlogForm createBlog={addBlog} />
+    </Togglable>
   )
 
   const deleteBlog = async (blog) => {
@@ -141,31 +141,31 @@ const App = () => {
   // Application requires login
   if (user === null) {
     return (
-        <div>
-          <h2>Log in to application</h2>
-          <Notification message={message} errorMessage={errorMessage} />
-          <form onSubmit={handleLogin}>
-            <div>
+      <div>
+        <h2>Log in to application</h2>
+        <Notification message={message} errorMessage={errorMessage} />
+        <form onSubmit={handleLogin}>
+          <div>
               Username:
-              <input
-                  name="Username"
-                  onChange={({ target }) => setUsername(target.value)}
-                  type="text"
-                  value={username}
-              />
-            </div>
-            <div>
+            <input
+              name="Username"
+              onChange={({ target }) => setUsername(target.value)}
+              type="text"
+              value={username}
+            />
+          </div>
+          <div>
               Password:
-              <input
-                  name="Password"
-                  onChange={({ target }) => setPassword(target.value)}
-                  type="password"
-                  value={password}
-              />
-            </div>
-            <button type="submit">Login</button>
-          </form>
-        </div>
+            <input
+              name="Password"
+              onChange={({ target }) => setPassword(target.value)}
+              type="password"
+              value={password}
+            />
+          </div>
+          <button type="submit">Login</button>
+        </form>
+      </div>
     )
   }
 
