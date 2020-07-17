@@ -79,6 +79,11 @@ const App = () => {
     blogFormRef.current.toggleVisibility()
     try {
       const savedBlog = await blogService.create(blog)
+      savedBlog.user = {
+        id: user.id,
+        username: user.username,
+        name: user.name
+      }
       setBlogs(blogs.concat(savedBlog))
       setMessage(`A new blog "${blog.title}" by ${blog.author} created.`)
       setTimeout(() => {
