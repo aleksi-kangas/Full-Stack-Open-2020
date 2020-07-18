@@ -149,11 +149,11 @@ const App = () => {
       <div>
         <h2>Log in to application</h2>
         <Notification message={message} errorMessage={errorMessage} />
-        <form onSubmit={handleLogin}>
+        <form onSubmit={handleLogin} className="loginForm">
           <div>
               Username:
             <input
-              name="Username"
+              id="username"
               onChange={({ target }) => setUsername(target.value)}
               type="text"
               value={username}
@@ -162,13 +162,13 @@ const App = () => {
           <div>
               Password:
             <input
-              name="Password"
+              id="password"
               onChange={({ target }) => setPassword(target.value)}
               type="password"
               value={password}
             />
           </div>
-          <button type="submit">Login</button>
+          <button type="submit" id="login-button" >Login</button>
         </form>
       </div>
     )
@@ -180,10 +180,11 @@ const App = () => {
       <Notification message={message} errorMessage={errorMessage} />
       <p>{user.name} logged in <button onClick={handleLogout}>Logout</button></p>
       {blogForm()}
-
-      {blogs.map(blog =>
-        <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
-      )}
+      <div className="blogs">
+        {blogs.map(blog =>
+          <Blog key={blog.id} blog={blog} likeBlog={likeBlog} deleteBlog={deleteBlog} user={user} />
+        )}
+      </div>
     </div>
   )
 }
