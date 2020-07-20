@@ -14,10 +14,10 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
     // Create new anecdote only if it contains content
     if (anecdote !== '') {
-      await anecdoteService.createAnecdote(anecdote)
+      const newAnecdote = await anecdoteService.createAnecdote(anecdote)
       // Dispatch the new anecdote to the reducer
-      dispatch(createAnecdote(anecdote))
-      dispatch(setNotification(`Anecdote '${anecdote}' created`))
+      dispatch(createAnecdote(newAnecdote))
+      dispatch(setNotification(`Anecdote '${newAnecdote}' created`))
       setTimeout(() => {
         dispatch(removeNotification())
       }, 5000)

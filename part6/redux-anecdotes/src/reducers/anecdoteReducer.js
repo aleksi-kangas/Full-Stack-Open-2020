@@ -1,13 +1,3 @@
-const getId = () => (100000 * Math.random()).toFixed(0)
-
-const asObject = (anecdote) => {
-  return {
-    content: anecdote,
-    id: getId(),
-    votes: 0
-  }
-}
-
 const anecdoteReducer = (state = [], action) => {
 
   switch (action.type) {
@@ -39,7 +29,7 @@ export const voteAnecdote = (id) => {
 export const createAnecdote = (anecdote) => {
   return {
     type: 'CREATE',
-    data: asObject(anecdote)
+    data: anecdote
   }
 }
 
