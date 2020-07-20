@@ -1,11 +1,9 @@
 import React from 'react'
+import { connect } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
-import { useDispatch } from "react-redux";
 import { setNotification } from '../reducers/notificationReducer'
 
-const AnecdoteForm = () => {
-  const dispatch = useDispatch()
-
+const AnecdoteForm = (props) => {
   const addAnecdote = async (event) => {
     event.preventDefault()
     const anecdoteContent = event.target.anecdote.value
@@ -13,8 +11,8 @@ const AnecdoteForm = () => {
     event.target.anecdote.value = ''
     // Create new anecdote only if it contains content
     if (anecdoteContent !== '') {
-      dispatch(createAnecdote(anecdoteContent))
-      dispatch(setNotification(`Anecdote '${anecdoteContent}' created`, 5))
+      props.createAnecdote(anecdoteContent)
+      props.setNotification(`Anecdote '${anecdoteContent}' created`, 5)
     }
   }
 
@@ -29,7 +27,12 @@ const AnecdoteForm = () => {
   )
 }
 
-export default AnecdoteForm
+const ConnectedAnecdoteForm = connect(
+  null,
+  { createAnecdote, setNotification }
+)(AnecdoteForm)
+
+export default ConnectedAnecdoteForm
 
 
 
