@@ -1,9 +1,12 @@
-import React, {useState} from 'react'
+import React, { useState } from 'react'
+import { useHistory } from 'react-router-dom'
 
 const AnecdoteForm = (props) => {
   const [content, setContent] = useState('')
   const [author, setAuthor] = useState('')
   const [info, setInfo] = useState('')
+
+  const history = useHistory()
 
   const handleSubmit = (e) => {
     e.preventDefault()
@@ -13,6 +16,14 @@ const AnecdoteForm = (props) => {
       info,
       votes: 0
     })
+    history.push('/')
+    props.setNotification(`A new anecdote '${content}' created`)
+    setContent('')
+    setAuthor('')
+    setInfo('')
+    setTimeout(() => {
+      props.setNotification('')
+    }, 10000)
   }
 
   return (
@@ -20,15 +31,15 @@ const AnecdoteForm = (props) => {
       <h2>create a new anecdote</h2>
       <form onSubmit={handleSubmit}>
         <div>
-          content
+          Content
           <input name='content' value={content} onChange={(e) => setContent(e.target.value)} />
         </div>
         <div>
-          author
+          Author
           <input name='author' value={author} onChange={(e) => setAuthor(e.target.value)} />
         </div>
         <div>
-          url for more info
+          Url for more information
           <input name='info' value={info} onChange={(e)=> setInfo(e.target.value)} />
         </div>
         <button>create</button>

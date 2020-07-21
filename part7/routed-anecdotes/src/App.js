@@ -24,14 +24,13 @@ const App = () => {
       id: '2'
     }
   ])
+  const [notification, setNotification] = useState('')
 
   // From the material
   const match = useRouteMatch('/anecdotes/:id')
   const anecdote = match
     ? anecdotes.find(a => a.id === match.params.id)
     : null
-
-  const [notification, setNotification] = useState('')
 
   const addNew = (anecdote) => {
     anecdote.id = (Math.random() * 10000).toFixed(0)
@@ -56,9 +55,10 @@ const App = () => {
     <div>
       <h1>Software anecdotes</h1>
       <Menu />
+      {notification !== '' ? <p><strong>{notification}</strong></p> : null}
       <Switch>
         <Route path="/create">
-          <AnecdoteForm addNew={addNew} />
+          <AnecdoteForm addNew={addNew} setNotification={setNotification} />
         </Route>
         <Route path="/about">
           <About />
