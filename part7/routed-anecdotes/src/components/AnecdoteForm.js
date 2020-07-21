@@ -3,9 +3,11 @@ import { useHistory } from 'react-router-dom'
 import { useField } from '../hooks'
 
 const AnecdoteForm = (props) => {
-  const content = useField('text')
-  const author = useField('text')
-  const info = useField('text')
+  // Destructure properties of the hook
+  // Enables using destructuring of e.g. {...content} in <input />
+  const { resetField: contentReset, ...content } = useField('text')
+  const { resetField: authorReset, ...author } = useField('text')
+  const { resetField: infoReset, ...info } = useField('text')
 
   const history = useHistory()
 
@@ -18,16 +20,17 @@ const AnecdoteForm = (props) => {
       votes: 0
     })
     history.push('/')
-    props.setNotification(`A new anecdote '${content}' created`)
+    props.setNotification(`A new anecdote '${content.value}' created`)
     setTimeout(() => {
       props.setNotification('')
     }, 10000)
   }
 
   const resetFields = () => {
-    content.reset()
-    author.reset()
-    info.reset()
+    // Reset the input fields by using the hook's reset function
+    contentReset()
+    authorReset()
+    infoReset()
   }
 
   return (
@@ -47,7 +50,7 @@ const AnecdoteForm = (props) => {
           <input {...info} />
         </div>
         <button type="submit">Create</button>
-        <button type="button" onClick={resetFields}>Reset</button>
+        <button type="reset" onClick={resetFields}>Reset</button>
       </form>
     </div>
   )
