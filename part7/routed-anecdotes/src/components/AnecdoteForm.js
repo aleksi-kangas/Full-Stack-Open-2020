@@ -3,8 +3,12 @@ import { useHistory } from 'react-router-dom'
 import { useField } from '../hooks'
 
 const AnecdoteForm = (props) => {
-  // Destructure properties of the hook
+  // Destructure properties of the useField hook, source:
+  // https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Destructuring_assignment
   // Enables using destructuring of e.g. {...content} in <input />
+  // Outcome is two variables:
+  //  contentReset: referencing the field's reset function
+  //  content: containing type, onChange and value properties
   const { resetField: contentReset, ...content } = useField('text')
   const { resetField: authorReset, ...author } = useField('text')
   const { resetField: infoReset, ...info } = useField('text')
