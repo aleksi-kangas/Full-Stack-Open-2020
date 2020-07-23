@@ -1,29 +1,53 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { Switch, Route, useRouteMatch } from 'react-router-dom'
 import './App.css'
+import Menu from './components/Menu'
 import Blogs from './components/Blogs'
+import Blog from './components/Blog'
 import Notification from './components/Notification'
 import BlogForm from './components/BlogForm'
 import LoginForm from './components/LoginForm'
-import Togglable from './components/Togglable'
+import Users from './components/Users'
+import User from './components/User'
 import blogService from './services/blogs'
+import userService from './services/users'
 import { initializeBlogs } from './reducers/blogReducer'
-import { removeUser, setUser } from './reducers/userReducer'
+import { setUser } from './reducers/loginReducer'
+import { initializeUsers } from './reducers/userReducer'
 
 
 const App = () => {
   const dispatch = useDispatch()
 
-  const currentUser = useSelector(state => state.user)
+  const loggedUser = useSelector(state => state.loggedUser)
+  const users = useSelector(state => state.users)
+  const blogs = useSelector(state => state.blogs)
 
-  // Reference for BlogForm object to control visibility
-  const blogFormRef = React.createRef()
+  // Resolve id in users route
+  const matchUser = useRouteMatch('/users/:id')
+  const user = matchUser
+    ? users.find(u => u.id === matchUser.params.id)
+    : null
+
+  // Resolve id in blogs route
+  const matchBlog = useRouteMatch('/blogs/:id')
+  const blog = matchBlog
+    ? blogs.find(u => u.id === matchBlog.params.id)
+    : null
+
   useEffect(() => {
-    const fetchBlogs = async () => {
-      return await blogService.getAll()
-    }
-    fetchBlogs()
+    // Retrieve blogs from the backend
+    blogService
+      .getAll()
       .then(blogs => dispatch(initializeBlogs(blogs)))
+  }, [dispatch])
+
+  useEffect(() => {
+    // Retrieve users from the backend
+    userService
+      .getAll()
+      .then(users => dispatch(initializeUsers(users)))
   }, [dispatch])
 
   useEffect(() => {
@@ -36,37 +60,39 @@ const App = () => {
     }
   }, [dispatch])
 
-  const handleLogout = () => {
-    window.localStorage.removeItem('loggedUser')
-    dispatch(removeUser())
-  }
-
-  // User to render BlogFrom inside a Togglable component
-  const blogForm = () => (
-    <Togglable buttonLabel='New Blog' ref={blogFormRef}>
-      <BlogForm />
-    </Togglable>
-  )
-
   // Application requires login
-  if (currentUser === null) {
+  if (loggedUser === null) {
     return (
       <div>
         <h2>Blogs</h2>
         <Notification />
         <LoginForm />
       </div>
-
     )
   }
 
   return (
     <div>
+      <Menu />
       <h2>Blogs</h2>
       <Notification />
-      <p>{currentUser.name} logged in <button onClick={handleLogout}>Logout</button></p>
-      {blogForm()}
-      <Blogs />
+      <Switch>
+        <Route path="/blogs/:id">
+          <Blog blog={blog}/>
+        </Route>
+        <Route path="/users/:id">
+          <User user={user}/>
+        </Route>
+        <Route path="/users">
+          <Users/>
+        </Route>
+        <Route path="/">
+          <div>
+            <BlogForm />
+            <Blogs/>
+          </div>
+        </Route>
+      </Switch>
     </div>
   )
 }

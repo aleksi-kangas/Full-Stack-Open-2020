@@ -1,6 +1,6 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
-import Blog from './Blog'
+import { Link } from 'react-router-dom'
 
 const Blogs = () => {
   // Retrieve the blogs from Redux store
@@ -18,7 +18,9 @@ const Blogs = () => {
   return (
     <div className="blogs">
       {sortedBlogs.map(blog =>
-        <Blog key={blog.id} blog={blog} />
+        <li key={blog.id}>
+          <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
+        </li>
       )}
     </div>
   )

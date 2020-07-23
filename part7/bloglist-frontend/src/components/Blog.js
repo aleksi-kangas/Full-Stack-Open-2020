@@ -1,14 +1,15 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import blogService from '../services/blogs'
 import { likeBlog, removeBlog } from '../reducers/blogReducer'
 import { setError, removeNotification, setNotification } from '../reducers/notificationReducer'
+import { useHistory } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
-  const [showInfo, setShowInfo] = useState(false)
 
   const dispatch = useDispatch()
-  const currentUser = useSelector(state => state.user)
+  const history = useHistory()
+  const loggedUser = useSelector(state => state.loggedUser)
 
   // Style from the material
   const blogStyle = {
@@ -42,47 +43,33 @@ const Blog = ({ blog }) => {
       try {
         await blogService.remove(blog.id)
         dispatch(removeBlog(blog))
+        history.push('/')
         dispatch(setNotification(`Deleted blog '${blog.title}'`))
         setTimeout(() => {
-          removeNotification()
+          dispatch(removeNotification())
         }, 3000)
       } catch (error) {
-        setError(error.response.data.error)
+        dispatch(setError(error.response.data.error))
         setTimeout(() => {
-          removeNotification()
+          dispatch(removeNotification())
         }, 5000)
       }
     }
   }
 
+  if (!blog) {
+    return null
+  }
+
   return (
     <div style={blogStyle} className="blog" >
-      <div>
-        {blog.title} by {blog.author}
-        <button onClick={() => setShowInfo(!showInfo)}>{showInfo === true ? 'Hide' : 'View'}</button>
-      </div>
-      {showInfo === true ?
-        <div>
-          <div>
-            {blog.url}
-          </div>
-          <div>
-            Likes {blog.likes}
-            <button onClick={() => handleLike(blog)}>Like</button>
-          </div>
-          <div>
-            Added by {blog.user.name}
-          </div>
-          {currentUser.id === blog.user.id ?
-            <div>
-              <button onClick={() => handleDelete(blog)}>Remove</button>
-            </div>
-            :
-            null
-          }
-        </div>
-        :
-        null
+      <h2>{blog.title} by {blog.author}</h2>
+      <p>Url: <a href={blog.url}>{blog.url}</a></p>
+      <p>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>Like</button></p>
+      <p>Added by: {blog.user.name}</p>
+      {loggedUser.id === blog.user.id
+        ? <button onClick={() => handleDelete(blog)}>Remove</button>
+        : null
       }
     </div>
   )

@@ -1,24 +1,16 @@
-const userReducer = (state = null, action) => {
+const userReducer = (state = [], action) => {
   switch(action.type) {
-    case 'SET_USER':
+    case 'INITIALIZE_USERS':
       return action.data
-    case 'REMOVE_USER':
-      return null
     default:
       return state
   }
 }
 
-export const setUser = (user) => {
+export const initializeUsers = (users) => {
   return {
-    type: 'SET_USER',
-    data: user
-  }
-}
-
-export const removeUser = () => {
-  return {
-    type: 'REMOVE_USER'
+    type: 'INITIALIZE_USERS',
+    data: users
   }
 }
 

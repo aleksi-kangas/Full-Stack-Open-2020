@@ -1,7 +1,7 @@
-import userReducer from './userReducer'
+import loginReducer from './loginReducer'
 import deepFreeze from 'deep-freeze'
 
-describe('userReducer', () => {
+describe('loginReducer', () => {
   test('returns state correctly with action SET_USER', () => {
     const state = []
     const user = {
@@ -16,7 +16,7 @@ describe('userReducer', () => {
     }
 
     deepFreeze(state)
-    const newState = userReducer(state, action)
+    const newState = loginReducer(state, action)
 
     expect(newState).toEqual(user)
   })
@@ -33,7 +33,7 @@ describe('userReducer', () => {
     }
 
     deepFreeze(state)
-    const newState = userReducer(state, action)
+    const newState = loginReducer(state, action)
 
     expect(newState).toEqual(null)
   })
