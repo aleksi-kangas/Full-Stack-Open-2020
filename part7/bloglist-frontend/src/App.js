@@ -33,7 +33,7 @@ const App = () => {
   // Resolve id in blogs route
   const matchBlog = useRouteMatch('/blogs/:id')
   const blog = matchBlog
-    ? blogs.find(u => u.id === matchBlog.params.id)
+    ? blogs.find(b => b.id === matchBlog.params.id)
     : null
 
   useEffect(() => {
