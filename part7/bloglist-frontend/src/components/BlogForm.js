@@ -14,7 +14,8 @@ const BlogForm = () => {
     const blog = {
       title: event.target.title.value,
       author: event.target.author.value,
-      url: event.target.url.value
+      url: event.target.url.value,
+      comments: []
     }
     try {
       const savedBlog = await blogService.create(blog)

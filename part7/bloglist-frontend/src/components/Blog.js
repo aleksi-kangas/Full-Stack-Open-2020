@@ -1,7 +1,7 @@
 import React from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import blogService from '../services/blogs'
-import { likeBlog, removeBlog } from '../reducers/blogReducer'
+import { removeBlog, updateBlog } from '../reducers/blogReducer'
 import { setError, removeNotification, setNotification } from '../reducers/notificationReducer'
 import { useHistory } from 'react-router-dom'
 
@@ -24,8 +24,29 @@ const Blog = ({ blog }) => {
     const updatedBlog = {...blog, likes: blog.likes + 1 }
     try {
       await blogService.update(blog.id, updatedBlog)
-      dispatch(likeBlog(updatedBlog))
+      dispatch(updateBlog(updatedBlog))
       dispatch(setNotification(`Liked blog '${blog.title}'`))
+      setTimeout(() => {
+        dispatch(removeNotification())
+      }, 2000)
+    } catch (error) {
+      dispatch(setError(error.response.data.error))
+      setTimeout(() => {
+        dispatch(removeNotification())
+      }, 5000)
+    }
+  }
+
+  const handleComment = async (event) => {
+    event.preventDefault()
+    const updatedBlog = {
+      ...blog,
+      comments: blog.comments.concat(event.target.comment.value)
+    }
+    try {
+      await blogService.comment(blog.id, updatedBlog)
+      dispatch(updateBlog(updatedBlog))
+      dispatch(setNotification(`Comment added`))
       setTimeout(() => {
         dispatch(removeNotification())
       }, 2000)
@@ -71,6 +92,18 @@ const Blog = ({ blog }) => {
         ? <button onClick={() => handleDelete(blog)}>Remove</button>
         : null
       }
+      <div>
+        <h3>Comments</h3>
+        <form onSubmit={handleComment}>
+          <input name="comment" type="text"/>
+          <button type="submit">Add Comment</button>
+        </form>
+        <ul>
+          {blog.comments.map(comment =>
+            <li key={comment}>{comment}</li>
+          )}
+        </ul>
+      </div>
     </div>
   )
 }

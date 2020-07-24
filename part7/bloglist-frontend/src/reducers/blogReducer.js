@@ -4,7 +4,7 @@ const blogReducer = (state = [], action) => {
       return action.data
     case 'NEW_BLOG':
       return state.concat(action.data)
-    case 'LIKE_BLOG':
+    case 'UPDATE_BLOG':
       return state.map(b => b.id === action.data.id ? action.data : b)
     case 'REMOVE_BLOG':
       return state.filter(b => b.id !== action.data.id)
@@ -27,9 +27,9 @@ export const createBlog = (blog) => {
   }
 }
 
-export const likeBlog = (blog) => {
+export const updateBlog = (blog) => {
   return {
-    type: 'LIKE_BLOG',
+    type: 'UPDATE_BLOG',
     data: blog
   }
 }
