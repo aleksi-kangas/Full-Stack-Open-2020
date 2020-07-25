@@ -5,7 +5,7 @@ import { Table } from 'react-bootstrap'
 
 const Users = () => {
   const [users, setUsers] = useState([])
--
+
   useEffect(() => {
     userService
       .getAll()
@@ -23,8 +23,7 @@ const Users = () => {
           </tr>
           {users.map(user =>
             <tr key={user.id}>
-              <td>+
-                
+              <td>
                 <Link to={`/users/${user.id}`}>{user.name}</Link>
               </td>
               <td>{user.blogs.length}</td>
