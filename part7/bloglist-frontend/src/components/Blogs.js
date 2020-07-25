@@ -1,6 +1,7 @@
 import React from 'react'
 import { useSelector } from 'react-redux'
 import { Link } from 'react-router-dom'
+import { ListGroup } from 'react-bootstrap'
 
 const Blogs = () => {
   // Retrieve the blogs from Redux store
@@ -17,11 +18,14 @@ const Blogs = () => {
 
   return (
     <div className="blogs">
-      {sortedBlogs.map(blog =>
-        <li key={blog.id}>
-          <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
-        </li>
-      )}
+      <h2>Blogs</h2>
+      <ListGroup>
+        {sortedBlogs.map(blog =>
+          <ListGroup.Item key={blog.id} variant="light">
+            <Link to={`/blogs/${blog.id}`}>{blog.title} by {blog.author}</Link>
+          </ListGroup.Item>
+        )}
+      </ListGroup>
     </div>
   )
 }

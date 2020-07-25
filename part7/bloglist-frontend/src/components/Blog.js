@@ -4,6 +4,7 @@ import blogService from '../services/blogs'
 import { removeBlog, updateBlog } from '../reducers/blogReducer'
 import { setError, removeNotification, setNotification } from '../reducers/notificationReducer'
 import { useHistory } from 'react-router-dom'
+import { Form, Button, ListGroup } from 'react-bootstrap'
 
 const Blog = ({ blog }) => {
 
@@ -15,8 +16,6 @@ const Blog = ({ blog }) => {
   const blogStyle = {
     paddingTop: 10,
     paddingLeft: 2,
-    border: 'solid',
-    borderWidth: 1,
     marginBottom: 5
   }
 
@@ -86,23 +85,31 @@ const Blog = ({ blog }) => {
     <div style={blogStyle} className="blog" >
       <h2>{blog.title} by {blog.author}</h2>
       <p>Url: <a href={blog.url}>{blog.url}</a></p>
-      <p>Likes: {blog.likes} <button onClick={() => handleLike(blog)}>Like</button></p>
+      <p>Likes: {blog.likes}
+      <Button className="m-1" onClick={() => handleLike(blog)}>Like</Button></p>
       <p>Added by: {blog.user.name}</p>
       {loggedUser.id === blog.user.id
-        ? <button onClick={() => handleDelete(blog)}>Remove</button>
+        ? <Button onClick={() => handleDelete(blog)}>Remove</Button>
         : null
       }
-      <div>
+      <div className="mt-3">
         <h3>Comments</h3>
-        <form onSubmit={handleComment}>
-          <input name="comment" type="text"/>
-          <button type="submit">Add Comment</button>
-        </form>
-        <ul>
+        <Form onSubmit={handleComment}>
+          <Form.Group>
+            <Form.Control
+              name="comment"
+              type="text"
+            />
+          </Form.Group>
+          <Button type="submit">Add Comment</Button>
+        </Form>
+        <ListGroup className="mt-3">
           {blog.comments.map(comment =>
-            <li key={comment}>{comment}</li>
+            <ListGroup.Item key={comment} variant="primary">
+              {comment}
+            </ListGroup.Item>
           )}
-        </ul>
+        </ListGroup>
       </div>
     </div>
   )

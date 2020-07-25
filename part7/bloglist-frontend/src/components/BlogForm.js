@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux'
 import { createBlog } from '../reducers/blogReducer'
 import blogService from '../services/blogs'
 import { removeNotification, setError, setNotification } from '../reducers/notificationReducer'
+import { Button, Form } from 'react-bootstrap'
+
 
 const BlogForm = () => {
   const [showForm, setShowForm] = useState(false)
@@ -37,39 +39,41 @@ const BlogForm = () => {
     return (
       <div>
         <h2>Create a New Blog</h2>
-        <form onSubmit={addBlog}>
-          <div>
-            Title:
-            <input
+        <Form onSubmit={addBlog}>
+          <Form.Group>
+            <Form.Label>Title:</Form.Label>
+            <Form.Control
               id="title"
               name="title"
               type="text"
             />
-          </div>
-          <div>
-            Author:
-            <input
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Author:</Form.Label>
+            <Form.Control
               id="author"
               name="author"
               type="text"
             />
-          </div>
-          <div>
-            Url:
-            <input
+          </Form.Group>
+          <Form.Group>
+            <Form.Label>Url:</Form.Label>
+            <Form.Control
               id="url"
               name="url"
               type="text"
             />
-          </div>
-          <button type="submit" id='submit-button'>Create</button>
-          <button type="button" onClick={() => setShowForm(false)}>Cancel</button>
-        </form>
+          </Form.Group>
+          <Button className='m-1' type="submit" id='submit-button'>Create</Button>
+          <Button className='m-1' type="button" onClick={() => setShowForm(false)}>Cancel</Button>
+        </Form>
       </div>
     )
   } else {
     return (
-      <button onClick={() => setShowForm(true)}>Create</button>
+      <div className='m-2'>
+        <Button onClick={() => setShowForm(true)}>Create</Button>
+      </div>
     )
   }
 

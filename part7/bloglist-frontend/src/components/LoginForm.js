@@ -1,13 +1,17 @@
 import React from 'react'
-import { useDispatch } from 'react-redux'
+import { useDispatch, useSelector } from 'react-redux'
 import { setUser } from '../reducers/loginReducer'
 import { removeNotification, setNotification, setError } from '../reducers/notificationReducer'
 import loginService from '../services/login'
 import blogService from '../services/blogs'
+import { Form, Button } from 'react-bootstrap'
+import { Redirect, useHistory } from 'react-router-dom'
 
 
 const LoginForm = () => {
   const dispatch = useDispatch()
+  const loggedUser = useSelector(state => state.loggedUser)
+  const history = useHistory()
 
   const handleLogin = async (event) => {
     event.preventDefault()
@@ -35,26 +39,36 @@ const LoginForm = () => {
     }
   }
 
+  if (loggedUser) {
+    history.push('/')
+    return (
+    <Redirect to="/" />
+    )
+  }
+
   return (
-    <form onSubmit={handleLogin} className="login-form">
-      <div>
-        Username:
-        <input
-          id="username"
-          name="username"
-          type="text"
-        />
-      </div>
-      <div>
-        Password:
-        <input
-          id="password"
-          name="password"
-          type="password"
-        />
-      </div>
-      <button type="submit" id="login-button" >Login</button>
-    </form>
+    <div>
+      <h2>Login</h2>
+      <Form onSubmit={handleLogin} className="login-form">
+        <Form.Group>
+          <Form.Label>Username:</Form.Label>
+          <Form.Control
+            id="username"
+            name="username"
+            type="text"
+          />
+        </Form.Group>
+        <Form.Group>
+          <Form.Label>Password:</Form.Label>
+          <Form.Control
+            id="password"
+            name="password"
+            type="password"
+          />
+          </Form.Group>
+          <Button type="submit" variant="primary" id="login-button" >Login</Button>
+      </Form>
+    </div>
   )
 }
 

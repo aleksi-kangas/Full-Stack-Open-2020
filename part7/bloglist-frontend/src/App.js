@@ -1,6 +1,10 @@
 import React, { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { Switch, Route, useRouteMatch } from 'react-router-dom'
+import {
+  Switch, Route,
+  useRouteMatch,
+  Redirect
+} from 'react-router-dom'
 import './App.css'
 import Menu from './components/Menu'
 import Blogs from './components/Blogs'
@@ -60,36 +64,44 @@ const App = () => {
     }
   }, [dispatch])
 
-  // Application requires login
-  if (loggedUser === null) {
-    return (
-      <div>
-        <h2>Blogs</h2>
-        <Notification />
-        <LoginForm />
-      </div>
-    )
-  }
-
   return (
-    <div>
+    <div className="container">
       <Menu />
-      <h2>Blogs</h2>
       <Notification />
       <Switch>
+        <Route path="/login">
+          {loggedUser
+            ? <Redirect to="/" />
+            : <LoginForm />
+          }
+        </Route>
         <Route path="/blogs/:id">
-          <Blog blog={blog}/>
+          {loggedUser
+            ? <Blog blog={blog}/>
+            : <Redirect to="/login" />
+          }
         </Route>
         <Route path="/users/:id">
-          <User user={user}/>
+          {loggedUser
+            ? <User user={user}/>
+            : <Redirect to="/login" />
+          }
         </Route>
         <Route path="/users">
-          <Users/>
+          {loggedUser
+            ? <Users/>
+            : <Redirect to="/login" />
+          }
         </Route>
         <Route path="/">
           <div>
-            <BlogForm />
-            <Blogs/>
+            {loggedUser
+              ? <div>
+                  <Blogs/>
+                  <BlogForm />
+                </div>
+              : <Redirect to="/login" />
+            }
           </div>
         </Route>
       </Switch>

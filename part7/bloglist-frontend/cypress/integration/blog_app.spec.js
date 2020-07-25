@@ -30,7 +30,7 @@ describe('Blog app', function () {
       cy.get('#password').type('wrong')
       cy.get('#login-button').click()
 
-      cy.get('.error').contains('Wrong username or password')
+      cy.get('.alert').contains('Wrong username or password')
     })
   })
 
@@ -42,7 +42,7 @@ describe('Blog app', function () {
 
     it('A blog can be created', function () {
       // Open the blog form
-      cy.contains('New Blog').click()
+      cy.contains('Create').click()
       // Input blog information
       cy.get('#title').type('Title')
       cy.get('#author').type('Author')
@@ -65,15 +65,15 @@ describe('Blog app', function () {
       })
 
       it('A blog can be liked', function () {
-        cy.get('.blogs').contains('View').click()
-        cy.get('.blogs').contains('Like').click()
+        cy.get('.blogs').contains('Title').click()
+        cy.contains('Like').click()
 
-        cy.get('.blogs').contains('Likes 1')
+        cy.contains('Likes: 1')
       })
 
       it ('A blog can be removed by the user that added it', function () {
-        cy.get('.blogs').contains('View').click()
-        cy.get('.blogs').contains('Remove').click()
+        cy.get('.blogs').contains('Title').click()
+        cy.contains('Remove').click()
 
         cy.get('.blogs').contains('Title').should('not.exist')
       })
