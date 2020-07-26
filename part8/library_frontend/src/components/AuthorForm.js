@@ -10,7 +10,6 @@ const AuthorForm = ({ authors }) => {
 
   const updateAuthor = async (event) => {
     event.preventDefault()
-    console.log(selectedAuthor)
     await editAuthor({
       variables: {
         name: selectedAuthor,
