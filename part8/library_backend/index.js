@@ -171,11 +171,12 @@ const resolvers = {
 const server = new ApolloServer({
   typeDefs,
   resolvers,
-  context: async ({ request }) => {
-    const authentication = request ? request.headers.authorization : null
-    if (authentication && authentication.toLowerCase().startsWith('bearer ')) {
-      const decodedToken = jwt.verify(authentication.substring(7), process.env.JWT_SECRET)
-      return { currentUser: await User.findById(decodedToken.id) }
+  context: async ({ req }) => {
+    const auth = req ? req.headers.authorization : null
+    if (auth && auth.toLowerCase().startsWith('bearer ')) {
+      const decodedToken = jwt.verify(auth.substring(7), process.env.JWT_SECRET)
+      const currentUser = await User.findById(decodedToken.id)
+      return { currentUser }
     }
   }
 })

@@ -5,15 +5,18 @@ import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 const AuthorForm = ({ authors }) => {
   const [ selectedAuthor, setSelectedAuthor ] = useState(authors[0])
   const [ editAuthor ] = useMutation(EDIT_AUTHOR, {
-    refetchQueries: [{ query: ALL_AUTHORS }]
+    refetchQueries: [{ query: ALL_AUTHORS }],
+    onError: (error) => console.log(error)
   })
 
   const updateAuthor = async (event) => {
     event.preventDefault()
+    const born = Number(event.target.born.value)
+    event.target.born.value = ''
     await editAuthor({
       variables: {
         name: selectedAuthor,
-        setBornTo: Number(event.target.born.value)
+        setBornTo: born
       }
     })
   }
