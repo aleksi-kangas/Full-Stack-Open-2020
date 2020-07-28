@@ -1,7 +1,7 @@
 import React from 'react'
 import AuthorForm from './AuthorForm'
 
-const Authors = ({ show, token, authorsQuery }) => {
+const Authors = ({ show, token, authorsQuery, setNotification }) => {
   if (!show) {
     return null
   }
@@ -39,7 +39,7 @@ const Authors = ({ show, token, authorsQuery }) => {
         </tbody>
       </table>
       {token
-        ? <AuthorForm authors={authors} />
+        ? <AuthorForm authors={authors} setNotification={setNotification} />
         : null
       }
     </div>

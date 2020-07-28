@@ -1,11 +1,16 @@
 import React, { useEffect } from 'react'
 import { useMutation } from '@apollo/client'
-import { LOGIN, ME } from '../queries'
+import { ME } from '../graphql/queries'
+import { LOGIN } from '../graphql/mutations'
 
-const Login = ({ show, setToken, setPage }) => {
+const Login = ({ show, setToken, setPage, setNotification }) => {
   const [ login, result ] = useMutation(LOGIN, {
     refetchQueries: [{ query: ME }],
-    onCompleted: () => setPage('authors')
+    onCompleted: () => setPage('authors'),
+    onError: (error) => {
+      setNotification(error.message)
+      setTimeout(() => setNotification(null), 5000)
+    }
   })
 
   useEffect(() => {

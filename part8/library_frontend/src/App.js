@@ -5,12 +5,14 @@ import NewBook from './components/NewBook'
 import Login from './components/Login'
 import { useApolloClient, useQuery } from '@apollo/client'
 import Recommendations from './components/Recommendations'
-import { ALL_AUTHORS, ALL_BOOKS, ME } from './queries'
+import { ALL_AUTHORS, ALL_BOOKS, ME } from './graphql/queries'
+import Notification from './components/Notification'
 
 
 const App = () => {
   const [page, setPage] = useState('authors')
   const [token, setToken] = useState(null)
+  const [message, setMessage] = useState(null)
   const client = useApolloClient()
 
   const booksQuery = useQuery(ALL_BOOKS)
@@ -24,6 +26,10 @@ const App = () => {
       setToken(token)
     }
   }, [])
+
+  const setNotification = (msg) => {
+    setMessage(msg)
+  }
 
   const handleLogout = () => {
     setToken(null)
@@ -47,10 +53,13 @@ const App = () => {
         }
       </div>
 
+      <Notification message={message}/>
+
       <Authors
         show={page === 'authors'}
         token={token}
         authorsQuery={authorsQuery}
+        setNotification={setNotification}
       />
 
       <Books
@@ -65,6 +74,7 @@ const App = () => {
       <NewBook
         show={page === 'add'}
         setPage={setPage}
+        setNotification={setNotification}
       />
       {token
         ? null
@@ -73,6 +83,7 @@ const App = () => {
           show={page === 'login'}
           setToken={setToken}
           setPage={setPage}
+          setNotification={setNotification}
         />
       }
     </div>
