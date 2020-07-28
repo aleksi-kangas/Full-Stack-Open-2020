@@ -4,6 +4,9 @@ import App from './App'
 import { ApolloClient, ApolloProvider, HttpLink, InMemoryCache } from '@apollo/client'
 import { setContext } from 'apollo-link-context'
 
+// Using article as a base in GraphQL structure
+// https://medium.com/@peterpme/thoughts-on-structuring-your-apollo-queries-mutations-939ba4746cd8
+
 // As in the material
 const authLink = setContext((_, { headers }) => {
   const token = localStorage.getItem('loggedUser')
