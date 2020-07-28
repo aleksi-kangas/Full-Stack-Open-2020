@@ -18,8 +18,14 @@ const mutationDef = `
   }
 `
 
+const subscriptionDef = `
+  type Subscription {
+    _empty: String
+  }
+`
+
 const schema = makeExecutableSchema({
-  typeDefs: [queryDef, mutationDef, authorDef, bookDef, tokenDef, userDef],
+  typeDefs: [queryDef, mutationDef, subscriptionDef, authorDef, bookDef, tokenDef, userDef],
   resolvers: merge(authorResolvers, bookResolvers, tokenResolvers, userResolvers)
 })
 

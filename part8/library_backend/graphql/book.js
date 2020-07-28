@@ -1,6 +1,9 @@
 const Author = require('../models/author')
 const Book = require('../models/book')
 const { AuthenticationError, UserInputError } = require('apollo-server')
+const { PubSub } = require('apollo-server')
+
+const pubSub = new PubSub()
 
 const typeDef = `
   extend type Query {
@@ -14,6 +17,9 @@ const typeDef = `
       published: Int!
       genres: [String!]!
     ): Book
+  }
+  extend type Subscription {
+    bookAdded: Book!
   }
   type Book {
     title: String!
@@ -62,11 +68,18 @@ const resolvers = {
           ...args,
           author: author
         })
-        return await newBook.save()
+        await newBook.save()
+        await pubSub.publish('BOOK_ADDED', { bookAdded: newBook })
+        return newBook
       } catch (error) {
         throw new UserInputError(error.message, { invalidArgs: args })
       }
     },
+  },
+  Subscription: {
+    bookAdded: {
+      subscribe: () => pubSub.asyncIterator(['BOOK_ADDED'])
+    }
   }
 }
 

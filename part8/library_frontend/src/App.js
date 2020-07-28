@@ -3,10 +3,11 @@ import Authors from './components/Authors'
 import Books from './components/Books'
 import NewBook from './components/NewBook'
 import Login from './components/Login'
-import { useApolloClient, useQuery } from '@apollo/client'
+import { useApolloClient, useQuery, useSubscription } from '@apollo/client'
 import Recommendations from './components/Recommendations'
 import { ALL_AUTHORS, ALL_BOOKS, ME } from './graphql/queries'
 import Notification from './components/Notification'
+import { BOOK_ADDED } from './graphql/subscriptions'
 
 
 const App = () => {
@@ -26,6 +27,14 @@ const App = () => {
       setToken(token)
     }
   }, [])
+
+  // Subscribe to updates of added books
+  useSubscription(BOOK_ADDED, {
+    onSubscriptionData: ({ subscriptionData }) => {
+      const addedBook = subscriptionData.data.bookAdded
+      window.alert(`${addedBook.title} has been added`)
+    }
+  })
 
   const setNotification = (msg) => {
     setMessage(msg)
