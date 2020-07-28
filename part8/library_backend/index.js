@@ -5,6 +5,9 @@ const jwt = require('jsonwebtoken')
 require('dotenv').config()
 const { schema } = require('./graphql/schema')
 
+// Using article as a base of the backend structure
+// https://www.apollographql.com/blog/modularizing-your-graphql-schema-code-d7f71d5ed5f2/
+
 mongoose
   .connect(process.env.MONGODB_URI, {useUnifiedTopology: true, useNewUrlParser: true})
   .then(() => {
