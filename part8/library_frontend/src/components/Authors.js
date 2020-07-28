@@ -1,19 +1,17 @@
 import React from 'react'
 import AuthorForm from './AuthorForm'
-import { useQuery } from '@apollo/client'
-import { ALL_AUTHORS } from '../queries'
 
-const Authors = ({ show, token }) => {
-  const queryResult = useQuery(ALL_AUTHORS)
+const Authors = ({ show, token, authorsQuery }) => {
   if (!show) {
     return null
   }
+
   // Query not ready as shown in the material
-  if (queryResult.loading) {
+  if (authorsQuery.loading) {
     return <div>Loading...</div>
   }
 
-  const authors = queryResult.data.allAuthors
+  const authors = authorsQuery.data.allAuthors
 
   return (
     <div>
@@ -21,7 +19,9 @@ const Authors = ({ show, token }) => {
       <table>
         <tbody>
           <tr>
-            <th></th>
+            <th>
+              Name
+            </th>
             <th>
               Born
             </th>

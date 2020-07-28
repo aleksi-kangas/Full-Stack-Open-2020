@@ -1,9 +1,10 @@
 import React, { useEffect } from 'react'
 import { useMutation } from '@apollo/client'
-import { LOGIN } from '../queries'
+import { LOGIN, ME } from '../queries'
 
 const Login = ({ show, setToken, setPage }) => {
   const [ login, result ] = useMutation(LOGIN, {
+    refetchQueries: [{ query: ME }],
     onCompleted: () => setPage('authors')
   })
 
