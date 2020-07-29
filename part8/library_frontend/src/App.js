@@ -20,6 +20,19 @@ const App = () => {
   const authorsQuery = useQuery(ALL_AUTHORS)
   const userQuery = useQuery(ME)
 
+  // From the material
+  const updateCache = (addedBook) => {
+    // Helper function from the material
+    const collectionIncludes = (collection, obj) => collection.map(o => o.id).includes(obj.id)
+    const dataInStore = client.readQuery({ query: ALL_BOOKS })
+    if (!collectionIncludes(dataInStore.allBooks, addedBook)) {
+      client.writeQuery({
+        query: ALL_BOOKS,
+        data: { allBooks: dataInStore.allBooks.concat(addedBook) }
+      })
+    }
+  }
+
   // Fetch logged in status from local storage as shown in the material
   useEffect(() => {
     const token = localStorage.getItem('loggedUser')
@@ -32,6 +45,7 @@ const App = () => {
   useSubscription(BOOK_ADDED, {
     onSubscriptionData: ({ subscriptionData }) => {
       const addedBook = subscriptionData.data.bookAdded
+      updateCache(addedBook)
       window.alert(`${addedBook.title} has been added`)
     }
   })
