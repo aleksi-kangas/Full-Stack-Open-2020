@@ -18,7 +18,7 @@ const App = () => {
 
   const booksQuery = useQuery(ALL_BOOKS)
   const authorsQuery = useQuery(ALL_AUTHORS)
-  const userQuery = useQuery(ME)
+  const userQuery = useQuery(ME, { fetchPolicy: 'no-cache'})
 
   // From the material
   const updateCache = (addedBook) => {
@@ -91,7 +91,6 @@ const App = () => {
       />
       <Recommendations
         show={page === 'recommendations'}
-        booksQuery={booksQuery}
         userQuery={userQuery}
       />
       <NewBook

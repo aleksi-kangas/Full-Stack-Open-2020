@@ -1,7 +1,23 @@
-import React, { useState } from 'react'
+import React, { useState, useEffect } from 'react'
+import { useLazyQuery } from '@apollo/client'
+import { ALL_BOOKS } from '../graphql/queries'
 
 const Books = ({ show, booksQuery }) => {
-  const [filter, setFilter] = useState('all genres')
+  const [genre, setGenre] = useState('all genres')
+  const [filteredBooks, setFilteredBooks] = useState([])
+  const [booksGenreQuery, result] = useLazyQuery(ALL_BOOKS)
+
+  useEffect(() => {
+    if (result.data) {
+      setFilteredBooks(result.data.allBooks)
+    }
+  }, [result.data])
+
+  useEffect(() => {
+    if (booksQuery.data && genre === 'all genres') {
+      setFilteredBooks(booksQuery.data.allBooks)
+    }
+  }, [booksQuery, genre])
 
   if (!show) {
     return null
@@ -11,19 +27,11 @@ const Books = ({ show, booksQuery }) => {
     return <div>Loading...</div>
   }
 
-  const books = booksQuery.data.allBooks
-
-  const filterBooks = () => {
-    if (filter === 'all genres') {
-      return books
-    } else {
-      return books.filter(book => book.genres.includes(filter))
-    }
-  }
+  const allBooks = booksQuery.data.allBooks
 
   const extractGenres = () => {
     let filters = []
-    books.map((book) =>
+    allBooks.map((book) =>
       book.genres.forEach((genre) => {
         if (!filters.includes(genre)) {
           filters = filters.concat(genre)
@@ -34,10 +42,17 @@ const Books = ({ show, booksQuery }) => {
     return filters
   }
 
+  const handleGenreChange = async (genre) => {
+    setGenre(genre)
+    await booksGenreQuery({
+      variables: { genre: genre }
+    })
+  }
+
   return (
     <div>
       <h2>Books</h2>
-      <p>In genre: {filter}</p>
+      <p>In genre: {genre}</p>
       <table>
         <tbody>
           <tr>
@@ -51,7 +66,7 @@ const Books = ({ show, booksQuery }) => {
               Published
             </th>
           </tr>
-          {filterBooks().map(b =>
+          {filteredBooks.map(b =>
             <tr key={b.title}>
               <td>{b.title}</td>
               <td>{b.author.name}</td>
@@ -61,10 +76,10 @@ const Books = ({ show, booksQuery }) => {
         </tbody>
       </table>
       {extractGenres().map(genre =>
-        <button key={genre} onClick={() => setFilter(genre)}>{genre}</button>
+        <button key={genre} onClick={() => handleGenreChange(genre)}>{genre}</button>
       )}
       <div>
-        <button key='all genres' onClick={() => setFilter('all genres')}>all genres</button>
+        <button key='all genres' onClick={() => setGenre('all genres')}>all genres</button>
       </div>
     </div>
   )

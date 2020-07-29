@@ -18,7 +18,6 @@ export const CREATE_BOOK = gql`
       }
       published
       genres
-      id
     }
   }
 `
