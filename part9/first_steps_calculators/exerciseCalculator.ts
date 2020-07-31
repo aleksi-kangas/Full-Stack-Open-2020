@@ -38,7 +38,7 @@ const parseExerciseArgs = (args: Array<string>): ExerciseArgs => {
   };
 };
 
-const calculateExercises = (dailyExerciseHours: Array<number>, target: number): ExerciseAnalysis => {
+export const calculateExercises = (dailyExerciseHours: Array<number>, target: number): ExerciseAnalysis => {
   // Form all variables needed for ExerciseAnalysis interface
   const periodLength = dailyExerciseHours.length;
   const trainingDays = dailyExerciseHours.filter(dayHours => dayHours > 0).length;
@@ -78,12 +78,24 @@ const calculateExercises = (dailyExerciseHours: Array<number>, target: number): 
   };
 };
 
-try {
-  const {target, dailyExerciseHours} = parseExerciseArgs(process.argv);
-  console.log(calculateExercises(dailyExerciseHours, target));
-} catch (e) {
-  // Fixes eslint error about 'Unsafe member access .message on any value'
-  if (e instanceof Error) {
-    console.log('Error:', e.message);
+/*
+* Need to determine whether calculateExercises function is called from command line with node.js or elsewhere,
+* to prevent unnecessary errors being printed to the console by parseBmiArgs function.
+* https://stackoverflow.com/questions/45136831/node-js-require-main-module
+*/
+
+if (require.main === module) {
+  /*
+  * If-check prevents errors from being printed to the console,
+  * by skipping the command line argument parser.
+  */
+  try {
+    const {target, dailyExerciseHours} = parseExerciseArgs(process.argv);
+    console.log(calculateExercises(dailyExerciseHours, target));
+  } catch (e) {
+    // Fixes eslint error about 'Unsafe member access .message on any value'
+    if (e instanceof Error) {
+      console.log('Error:', e.message);
+    }
   }
 }
