@@ -29,13 +29,13 @@ const parseExerciseArgs = (args: Array<string>): ExerciseArgs => {
   const dailyExerciseHoursNumber = dailyExerciseHoursString.map(dayHours => Number(dayHours));
 
   if (dailyExerciseHoursNumber.includes(NaN)) {
-    throw new Error('Daily exercise hours must be numeric')
+    throw new Error('Daily exercise hours must be numeric');
   }
 
   return {
     target: Number(args[2]),
     dailyExerciseHours: dailyExerciseHoursNumber
-  }
+  };
 };
 
 const calculateExercises = (dailyExerciseHours: Array<number>, target: number): ExerciseAnalysis => {
@@ -51,17 +51,17 @@ const calculateExercises = (dailyExerciseHours: Array<number>, target: number): 
       return {
         rating: 3,
         ratingDescription: 'The daily exercise target has been met. Good wo<rk.'
-      }
+      };
     } else if (average / target >= 0.5 && average / target < 1.0) {
       return {
         rating: 2,
         ratingDescription: 'The daily exercise target was not met. Not too bad but could be better.'
-      }
+      };
     } else {
       return {
         rating: 1,
         ratingDescription: 'The daily exercise target was not met. There is a lot of room to improve!'
-      }
+      };
     }
   };
 
@@ -75,12 +75,15 @@ const calculateExercises = (dailyExerciseHours: Array<number>, target: number): 
     ratingDescription,
     target,
     average
-  }
+  };
 };
 
 try {
   const {target, dailyExerciseHours} = parseExerciseArgs(process.argv);
   console.log(calculateExercises(dailyExerciseHours, target));
-} catch (error) {
-  console.log('Error:', error.message)
+} catch (e) {
+  // Fixes eslint error about 'Unsafe member access .message on any value'
+  if (e instanceof Error) {
+    console.log('Error:', e.message);
+  }
 }

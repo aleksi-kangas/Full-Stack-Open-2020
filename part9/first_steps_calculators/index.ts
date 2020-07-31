@@ -3,7 +3,7 @@ import { calculateBmi } from './bmiCalculator';
 const app = express();
 
 app.get('/hello', (_req, res) => {
-  res.send('Hello Full Stack!')
+  res.send('Hello Full Stack!');
 });
 
 app.get('/bmi', (req, res) => {
@@ -23,7 +23,7 @@ app.get('/bmi', (req, res) => {
       weight,
       height,
       bmi
-    })
+    });
   } else {
     // Non-numeric parameters
     return res.status(400).json({ error: 'Parameters are not numbers'});

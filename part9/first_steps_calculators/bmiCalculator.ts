@@ -13,9 +13,9 @@ const parseBmiArgs = (args: Array<string>): BmiArgs => {
     return {
       height: Number(args[2]),
       weight: Number(args[3])
-    }
+    };
   } else {
-    throw new Error('Provided arguments were not numbers')
+    throw new Error('Provided arguments were not numbers');
   }
 };
 
@@ -38,7 +38,7 @@ export const calculateBmi = (height: number, weight: number): string | undefined
   } else if (bmi >= 40) {
     return 'Obese Class III (Very severely obese)';
   } else {
-    return
+    return;
   }
 };
 
@@ -56,7 +56,10 @@ if (require.main === module) {
   try {
     const {height, weight} = parseBmiArgs(process.argv);
     console.log(calculateBmi(height, weight));
-  } catch (error) {
-    console.log('Error:', error.message);
+  } catch (e) {
+    // Fixes eslint error about 'Unsafe member access .message on any value'
+    if (e instanceof Error) {
+      console.log('Error:', e.message);
+    }
   }
 }
