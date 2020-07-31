@@ -19,7 +19,7 @@ const parseBmiArgs = (args: Array<string>): BmiArgs => {
   }
 };
 
-const calculateBmi = (height: number, weight: number) => {
+export const calculateBmi = (height: number, weight: number): string | undefined => {
   const bmi = weight / Math.pow(height / 100, 2);
   if (bmi < 15) {
     return 'Very severely underweight';
@@ -37,12 +37,26 @@ const calculateBmi = (height: number, weight: number) => {
     return 'Obese Class II (Severely obese)';
   } else if (bmi >= 40) {
     return 'Obese Class III (Very severely obese)';
+  } else {
+    return
   }
 };
 
-try {
-  const {height, weight} = parseBmiArgs(process.argv);
-  console.log(calculateBmi(height, weight));
-} catch (error) {
-  console.log('Error:', error.message);
+/*
+* Need to determine whether calculateBmi function is called from command line with node.js or elsewhere,
+* to prevent unnecessary errors being printed to the console by parseBmiArgs function.
+* https://stackoverflow.com/questions/45136831/node-js-require-main-module
+*/
+
+if (require.main === module) {
+  /*
+  * If-check prevents errors from being printed to the console,
+  * by skipping the command line argument parser.
+  */
+  try {
+    const {height, weight} = parseBmiArgs(process.argv);
+    console.log(calculateBmi(height, weight));
+  } catch (error) {
+    console.log('Error:', error.message);
+  }
 }
