@@ -1,4 +1,4 @@
-interface Args {
+interface ExerciseArgs {
   target: number,
   dailyExerciseHours: Array<number>
 }
@@ -18,7 +18,7 @@ interface Rating {
   ratingDescription: string
 }
 
-const parseArgs = (args: Array<string>): Args => {
+const parseExerciseArgs = (args: Array<string>): ExerciseArgs => {
   if (args.length < 4) throw new Error('Not enough arguments');
 
   // Validate target (arg 2) to be number
@@ -79,7 +79,7 @@ const calculateExercises = (dailyExerciseHours: Array<number>, target: number): 
 };
 
 try {
-  const {target, dailyExerciseHours} = parseArgs(process.argv);
+  const {target, dailyExerciseHours} = parseExerciseArgs(process.argv);
   console.log(calculateExercises(dailyExerciseHours, target));
 } catch (error) {
   console.log('Error:', error.message)

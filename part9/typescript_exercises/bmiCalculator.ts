@@ -1,9 +1,9 @@
-interface Args {
+interface BmiArgs {
   height: number,
   weight: number
 }
 
-const parseArgs = (args: Array<string>): Args => {
+const parseBmiArgs = (args: Array<string>): BmiArgs => {
   if (args.length < 4) throw new Error('Not enough arguments');
   if (args.length > 4) throw new Error('Too many arguments');
 
@@ -41,7 +41,7 @@ const calculateBmi = (height: number, weight: number) => {
 };
 
 try {
-  const {height, weight} = parseArgs(process.argv);
+  const {height, weight} = parseBmiArgs(process.argv);
   console.log(calculateBmi(height, weight));
 } catch (error) {
   console.log('Error:', error.message);
