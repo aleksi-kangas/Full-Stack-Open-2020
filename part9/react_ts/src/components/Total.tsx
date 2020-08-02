@@ -8,8 +8,9 @@ interface Part {
 const Total: React.FC<{ parts: Array<Part>}> = ({ parts }) => {
   return (
     <p>
-      Number of exercises{" "}
-      {parts.reduce((carry, part) => carry + part.exerciseCount, 0)}
+      <strong> Total number of exercises{" "}
+        {parts.reduce((carry, part) => carry + part.exerciseCount, 0)}
+      </strong>
     </p>
   )
 };
