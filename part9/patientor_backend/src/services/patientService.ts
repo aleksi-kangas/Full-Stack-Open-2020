@@ -1,5 +1,5 @@
 import patients from '../../data/patients';
-import { Patient, NewPatient } from '../types';
+import { Patient, NewPatient, PublicPatient, Entry } from '../types';
 import { v4 as uuidv4 } from 'uuid';
 
 /*
@@ -9,22 +9,28 @@ const getPatients = (): Array<Patient> => {
   return patients;
 };
 
-const getPatientsSsnExcluded = (): Omit<Patient, 'ssn'>[] => {
+const getPublicPatients = (): PublicPatient[] => {
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  return patients.map(({ ssn, ...rest}) => ({...rest}));
+  return patients.map(({ ssn, entries, ...rest}) => ({...rest}));
 };
 
 const addPatient = (patient: NewPatient): Patient => {
-  const newPatient = {
+  const newPatient: Patient = {
     id: uuidv4(),
+    entries: [] as Entry[],
     ...patient
   };
   patients.push(newPatient);
   return newPatient;
 };
 
+const getPatientById = (id: string): Patient | undefined => {
+  return patients.find(p => p.id === id);
+};
+
 export default {
   getPatients,
-  getPatientsSsnExcluded,
-  addPatient
+  getPublicPatients,
+  addPatient,
+  getPatientById
 };
