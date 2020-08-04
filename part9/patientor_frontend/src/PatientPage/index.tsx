@@ -4,11 +4,14 @@ import axios from 'axios';
 import { apiBaseUrl } from "../constants";
 import { Gender, Patient } from '../types';
 import { updatePatient, useStateValue } from '../state';
-import { Header, Icon, List } from 'semantic-ui-react';
+import { Button, Header, Icon, List } from 'semantic-ui-react';
 import EntryDetails from './EntryDetails';
-import AddEntryForm, { EntryFormValues } from './AddEntryForm';
+import { EntryFormValues } from './AddEntryForm';
+import AddEntryModal from './AddEntryModal';
 
 const PatientPage: React.FC = () => {
+  const [modalOpen, setModalOpen] = React.useState<boolean>(false);
+  const [error, setError] = React.useState<string | undefined>();
   const [patient, setPatient] = useState<Patient | undefined>();
   const [{ patients }, dispatch] = useStateValue();
 
@@ -54,16 +57,21 @@ const PatientPage: React.FC = () => {
         .then(response => {
           if (patient) {
             patient.entries.push(response.data);
-            dispatch(updatePatient(patient))
+            dispatch(updatePatient(patient));
+            closeModal();
           }
         })
     } catch (e) {
-      console.error(e);
+      setError(e.response.data.error)
     }
   };
 
-  const handleCancel = () => {
-    console.log('cancel')
+  // From PatientListPage/index.tsx
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
   };
 
   if (!patient) {
@@ -76,13 +84,16 @@ const PatientPage: React.FC = () => {
       <p>Gender: <Icon name={getGenderIcon(patient.gender)}/></p>
       <p>SSN: {patient.ssn}</p>
       <p>Occupation: {patient.occupation}</p>
+      <Header as="h3" floated='left'>Entries</Header>
+      <AddEntryModal
+        modalOpen={modalOpen}
+        onSubmit={createEntry}
+        error={error}
+        onClose={closeModal}
+      />
+      <Button onClick={() => openModal()}>NewEntry</Button>
       {patient.entries.length > 0
       ? <div>
-          <Header as="h3">Entries</Header>
-          <AddEntryForm
-            onSubmit={createEntry}
-            onCancel={handleCancel}
-          />
           <List celled>
             {patient.entries.map(entry =>
               <List.Item key={entry.id}>

@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { useStateValue } from '../state';
 import { Field, Form, Formik } from 'formik';
 import { DiagnosisSelection, RatingField, RatingOption, TextField } from '../AddPatientModal/FormField';
@@ -11,6 +12,11 @@ interface Props {
   onSubmit: (values: EntryFormValues) => void;
   onCancel: () => void;
 }
+
+const isValidDate = (param: string): boolean => {
+  // Using moment.js library
+  return moment(param, 'YYYY-MM-DD', true).isValid();
+};
 
 const validateHealthCheck = (values: any) => {
   if (!values.healthCheckRating) {
@@ -51,6 +57,9 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         if (!values.date) {
           errors.date = requiredError;
         }
+        if (!isValidDate(values.date)) {
+          errors.date = 'Invalid date: date format is YYYY-MM-DD'
+        }
         if (!values.description) {
           errors.description = requiredError;
         }
@@ -59,7 +68,6 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
         }
         if (values.type === 'HealthCheck') {
           const healthCheckErrors = validateHealthCheck(values);
-          console.log(healthCheckErrors);
           if (healthCheckErrors) {
             errors[healthCheckErrors.field] = healthCheckErrors.error;
           }
