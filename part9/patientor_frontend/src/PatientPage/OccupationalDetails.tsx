@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { OccupationalHealthcareEntry } from '../types';
 import { List, Icon } from 'semantic-ui-react';
 import DiagnosisCodeList from './DiagnosisCodeList';
@@ -17,7 +17,7 @@ const OccupationalDetails: React.FC<{entry: OccupationalHealthcareEntry}> = ({ e
         Employer: {entry.employerName}
       </List.Content>
     </List.Content>
-  )
+  );
 };
 
 export default OccupationalDetails;

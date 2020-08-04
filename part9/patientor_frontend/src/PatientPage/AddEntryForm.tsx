@@ -18,6 +18,7 @@ const isValidDate = (param: string): boolean => {
   return moment(param, 'YYYY-MM-DD', true).isValid();
 };
 
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
 const validateHealthCheck = (values: any) => {
   if (!values.healthCheckRating) {
     return {field: 'healthCheckRating', error: 'Field is required'};
@@ -58,7 +59,7 @@ const AddEntryForm: React.FC<Props> = ({ onSubmit, onCancel }) => {
           errors.date = requiredError;
         }
         if (!isValidDate(values.date)) {
-          errors.date = 'Invalid date: date format is YYYY-MM-DD'
+          errors.date = 'Invalid date: date format is YYYY-MM-DD';
         }
         if (!values.description) {
           errors.description = requiredError;

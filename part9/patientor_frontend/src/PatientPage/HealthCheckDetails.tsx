@@ -18,7 +18,7 @@ const HealthCheckDetails: React.FC<{entry: HealthCheckEntry}> = ({ entry }) => {
         <HealthSymbol rating={entry.healthCheckRating}/>
       </List.Content>
     </List.Content>
-  )
+  );
 };
 
 export default HealthCheckDetails;

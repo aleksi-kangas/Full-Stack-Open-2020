@@ -35,7 +35,7 @@ const parseArrayOfDiagnosisCodes = (param: any): Array<Diagnosis['code']> => {
     return [];
   }
   if (!Array.isArray(param)) {
-    throw new Error('param must be an array containing objects of type Diagnosis.code')
+    throw new Error('param must be an array containing objects of type Diagnosis.code');
   }
   return param.map((code) => parseString(code, 'code'));
 };
@@ -79,6 +79,7 @@ export const toNewPatient = (object: any): NewPatient => {
   };
 };
 
+// eslint-disable-next-line @typescript-eslint/explicit-module-boundary-types
 export const toNewEntry = (obj: any): NewEntry => {
   // Create a base entry before figuring out which type of entry to create
   const baseEntry: Omit<BaseEntry, 'id'> = {
@@ -88,7 +89,7 @@ export const toNewEntry = (obj: any): NewEntry => {
   };
 
   if (obj.diagnosisCodes) {
-    baseEntry.diagnosisCodes = parseArrayOfDiagnosisCodes(obj.diagnosisCodes)
+    baseEntry.diagnosisCodes = parseArrayOfDiagnosisCodes(obj.diagnosisCodes);
   }
 
   const type = parseString(obj.type, 'type');
@@ -121,6 +122,6 @@ export const toNewEntry = (obj: any): NewEntry => {
         ...baseEntry
       };
     default:
-      throw new Error('Entry type could not be parsed')
+      throw new Error('Entry type could not be parsed');
   }
 };

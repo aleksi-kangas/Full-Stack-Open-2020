@@ -33,10 +33,10 @@ const App: React.FC = () => {
       axios
         .get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`)
         .then(response => {
-          dispatch(setDiagnoses(response.data))
-        })
+          dispatch(setDiagnoses(response.data));
+        });
       } catch (e) {
-      console.error(e)
+      console.error(e);
     }
   }, [dispatch]);
 

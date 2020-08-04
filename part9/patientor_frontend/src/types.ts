@@ -13,7 +13,7 @@ export interface Patient {
   gender: Gender;
   ssn?: string;
   dateOfBirth?: string;
-  entries: Array<Entry>
+  entries: Array<Entry>;
 }
 
 /* ENTRY */
@@ -52,7 +52,7 @@ export interface OccupationalHealthcareEntry extends BaseEntry {
   employerName: string;
   sickLeave?: {
     startDate: string;
-    endDate: string
+    endDate: string;
   };
 }
 

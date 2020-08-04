@@ -23,7 +23,7 @@ const EntryDetails: React.FC<{entry: Entry}> = ({ entry }) => {
     case 'OccupationalHealthcare':
       return <OccupationalDetails entry={entry} />;
     default:
-      return assertNever(entry)
+      return assertNever(entry);
   }
 };
 

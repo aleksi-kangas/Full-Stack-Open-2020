@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { HospitalEntry } from '../types';
 import { List, Icon } from 'semantic-ui-react';
 import DiagnosisCodeList from './DiagnosisCodeList';
@@ -17,7 +17,7 @@ const HospitalDetails: React.FC<{entry: HospitalEntry}> = ({ entry }) => {
       <List.Content>Date: {entry.discharge.date}</List.Content>
       <List.Content>Criteria: {entry.discharge.criteria}</List.Content>
     </List.Content>
-  )
+  );
 };
 
 export default HospitalDetails;

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { List } from 'semantic-ui-react';
 import { useStateValue } from '../state';
 import { Diagnosis } from '../types';
@@ -25,10 +25,10 @@ const DiagnosisCodeList: React.FC<{codes: Array<Diagnosis['code']>}> = ({ codes 
               </List.Description>
             </List.Content>
           </List.Item>
-        )
+        );
       })}
     </List>
-  )
+  );
 };
 
 export default DiagnosisCodeList;

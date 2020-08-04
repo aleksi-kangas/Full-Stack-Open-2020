@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import { Icon } from 'semantic-ui-react';
 
 const HealthSymbol: React.FC<{rating: number}> = ({ rating }) => {
@@ -17,7 +17,7 @@ const HealthSymbol: React.FC<{rating: number}> = ({ rating }) => {
 
   return (
     <Icon name="heart" color={resolveHeartColor()} />
-  )
+  );
 };
 
 export default HealthSymbol;

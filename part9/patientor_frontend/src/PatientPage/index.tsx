@@ -32,11 +32,11 @@ const PatientPage: React.FC = () => {
             dispatch(updatePatient(response.data));
           });
       } catch (e) {
-        console.error(e)
+        console.error(e);
       }
     } else {
       // Do not re-fetch data; use data in the state instead
-      setPatient(patients[patientId])
+      setPatient(patients[patientId]);
     }
   }, [patientId]); // eslint-disable-line
 
@@ -46,8 +46,16 @@ const PatientPage: React.FC = () => {
     } else if (gender === 'male') {
       return 'mars';
     } else {
-      return 'genderless'
+      return 'genderless';
     }
+  };
+
+  // From PatientListPage/index.tsx
+  const openModal = (): void => setModalOpen(true);
+
+  const closeModal = (): void => {
+    setModalOpen(false);
+    setError(undefined);
   };
 
   const createEntry = (entry: EntryFormValues) => {
@@ -60,18 +68,10 @@ const PatientPage: React.FC = () => {
             dispatch(updatePatient(patient));
             closeModal();
           }
-        })
+        });
     } catch (e) {
-      setError(e.response.data.error)
+      setError(e.response.data.error);
     }
-  };
-
-  // From PatientListPage/index.tsx
-  const openModal = (): void => setModalOpen(true);
-
-  const closeModal = (): void => {
-    setModalOpen(false);
-    setError(undefined);
   };
 
   if (!patient) {
@@ -104,7 +104,7 @@ const PatientPage: React.FC = () => {
         </div>
       : null}
     </div>
-  )
+  );
 };
 
 export default PatientPage;
