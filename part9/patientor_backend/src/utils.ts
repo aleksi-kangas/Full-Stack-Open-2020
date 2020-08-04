@@ -7,10 +7,12 @@ import moment from 'moment';
 const isString = (text: any): text is string => {
   return typeof text === 'string' || text instanceof String;
 };
-
+/*
 const isNumber = (param: any): param is number => {
   return typeof param === 'number' || param instanceof Number;
 };
+
+ */
 
 const isGender = (param: any): param is Gender => {
   return Object.values(Gender).includes(param);
@@ -55,13 +57,14 @@ const parseGender = (gender: any): Gender => {
 };
 
 const parseHealthRating = (rating: any): number => {
-  if (!rating || !isNumber(rating)) {
+  if (!rating || !isString(rating)) {
     throw new Error('Missing or malformed rating');
   }
-  if (rating === 0 || rating === 1 || rating === 2 || rating === 3) {
-    return rating
+  const numberRating = Number(rating);
+  if (numberRating === 0 || numberRating === 1 || numberRating === 2 || numberRating === 3) {
+    return numberRating;
   } else {
-    throw new Error('Incorrect rating')
+    throw new Error('Incorrect rating');
   }
 };
 

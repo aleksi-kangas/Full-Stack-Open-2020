@@ -6,6 +6,7 @@ import { Gender, Patient } from '../types';
 import { updatePatient, useStateValue } from '../state';
 import { Header, Icon, List } from 'semantic-ui-react';
 import EntryDetails from './EntryDetails';
+import AddEntryForm, { EntryFormValues } from './AddEntryForm';
 
 const PatientPage: React.FC = () => {
   const [patient, setPatient] = useState<Patient | undefined>();
@@ -46,6 +47,25 @@ const PatientPage: React.FC = () => {
     }
   };
 
+  const createEntry = (entry: EntryFormValues) => {
+    try {
+      axios
+        .post(`${apiBaseUrl}/patients/${patientId}/entries`, entry)
+        .then(response => {
+          if (patient) {
+            patient.entries.push(response.data);
+            dispatch(updatePatient(patient))
+          }
+        })
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const handleCancel = () => {
+    console.log('cancel')
+  };
+
   if (!patient) {
     return null;
   }
@@ -59,6 +79,10 @@ const PatientPage: React.FC = () => {
       {patient.entries.length > 0
       ? <div>
           <Header as="h3">Entries</Header>
+          <AddEntryForm
+            onSubmit={createEntry}
+            onCancel={handleCancel}
+          />
           <List celled>
             {patient.entries.map(entry =>
               <List.Item key={entry.id}>
